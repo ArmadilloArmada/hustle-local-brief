@@ -1,0 +1,47 @@
+# Weekly draft brief — human reviews / approves / exports locally.
+# Does NOT post to social platforms and does NOT send email.
+name: Weekly local brief
+
+on:
+  schedule:
+    # Monday 14:10 UTC
+    - cron: "10 14 * * 1"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Ensure config.yaml
+        run: |
+          if [ ! -f config.yaml ]; then
+            cp config.example.yaml config.yaml
+          fi
+
+      - name: Run brief pipeline (draft only)
+        # Template draft — no OPENAI_API_KEY required for a usable pack.
+        run: python -m src
+
+      - name: Upload out/ as draft artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: local-brief-draft
+          path: out/
+          if-no-files-found: error
+          retention-days: 14

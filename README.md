@@ -98,6 +98,10 @@ config.yaml → fetch RSS/iCal → cluster by category → draft brief + social 
 
 Categories (keyword heuristics): family, arts, music, outdoors, civic, learning, food, tech, other.
 
+## Weekly schedule (GitHub Actions)
+
+Every Monday at **14:10 UTC**, [`.github/workflows/weekly-local-brief.yml`](.github/workflows/weekly-local-brief.yml) runs a **draft-only** pipeline (`python -m src`) and uploads artifact **`local-brief-draft`** (no approve/export/post). Download from the Actions run → **Artifacts**, unzip into `out/`, then approve + export locally.
+
 ## Compliance notes
 
 - Prefer **official public RSS/iCal** endpoints; do not scrape sites that forbid it.
