@@ -4,6 +4,21 @@ Austin, TX weekly **"what's new"** community brief — a small Python CLI that p
 
 Part of [Project Hustle](https://github.com/armadilloarmada) Tier 0 (local community briefs). **No auto-posting** to Nextdoor, Facebook, Discord, or anywhere else.
 
+## Workflow
+
+```
+Draft → Approve → Export → human pastes
+```
+
+| Step | Command | Result |
+|------|---------|--------|
+| 1. Draft | `python -m src` | `out/brief-YYYY-MM-DD.md`, `out/social-posts.md` |
+| 2. Approve | `python -m src approve` | Human stamp at `out/.approval.json` (no network posts) |
+| 3. Export | `python -m src export` | Ready-to-paste pack under `out/export/` |
+| 4. Paste | *(you)* | Copy files into Facebook / Nextdoor / Discord yourself |
+
+This tool **never** posts to social platforms automatically.
+
 ## Requirements
 
 - Python **3.11+**
@@ -22,10 +37,36 @@ cp config.example.yaml config.yaml
 python -m src
 ```
 
-Outputs (gitignored contents except `.gitkeep`):
+Review the drafts, then:
 
-- `out/brief-YYYY-MM-DD.md` — weekly brief draft
-- `out/social-posts.md` — community / short / Discord-style post drafts
+```bash
+python -m src approve
+python -m src export
+```
+
+Open `out/export/` and paste:
+
+- `brief.md` (or `brief.pdf`) — weekly one-pager
+- `community-post.txt` — Nextdoor / Facebook-style copy
+- `short-post.txt` — short / X-style copy
+- `discord-blurb.txt` — Discord / Slack blurb
+- `social-posts.md` — full social draft for reference
+- `README.md` — pack checklist
+
+### Dry-run (no writes)
+
+```bash
+python -m src approve --dry-run
+python -m src export --dry-run
+```
+
+### Useful flags
+
+```bash
+python -m src approve --brief out/brief-2026-10-18.md --note "spot-checked APL times"
+python -m src export --no-pdf          # Markdown + social files only
+python -m src export --force           # skip approval gate (not recommended)
+```
 
 ## Config
 
@@ -52,6 +93,7 @@ If the key is unset, the draft fails, or `openai.enabled` is false, the CLI fall
 
 ```
 config.yaml → fetch RSS/iCal → cluster by category → draft brief + social → out/
+         → human approve → out/export/ paste pack → human posts manually
 ```
 
 Categories (keyword heuristics): family, arts, music, outdoors, civic, learning, food, tech, other.
