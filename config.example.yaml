@@ -1,0 +1,40 @@
+# Austin, TX weekly "what's new" community brief
+# Copy to config.yaml and adjust feeds as needed.
+# Prefer official public RSS / iCal endpoints (respect robots.txt and ToS).
+
+city:
+  name: Austin
+  region: TX
+  timezone: America/Chicago
+
+# Look-ahead window for clustering / drafting
+window_days: 7
+
+# Cap events kept after fetch (keeps drafts readable)
+max_events: 80
+
+# Public event / calendar feeds (Austin-focused)
+feeds:
+  - name: Austin Public Library
+    url: https://library.austintexas.gov/events-feed.xml
+    type: rss
+    notes: Official APL upcoming-events RSS (data.austintexas.gov)
+
+  - name: UT Austin Events
+    url: https://calendar.utexas.edu/calendar.xml
+    type: rss
+    notes: Public Localist RSS for Texas Today / UT events
+
+  - name: UT Austin Events (iCal)
+    url: https://calendar.utexas.edu/calendar.ics
+    type: ical
+    notes: Same Localist calendar as iCal; pipeline date-filters the window
+
+# Optional OpenAI drafting — set OPENAI_API_KEY in the environment.
+# Without a key, the CLI writes a deterministic template draft.
+openai:
+  model: gpt-4o-mini
+  enabled: true
+
+output:
+  dir: out
